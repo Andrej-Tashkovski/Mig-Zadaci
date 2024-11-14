@@ -3,7 +3,7 @@ using namespace std;
 
 class String {
 protected:
-    char * chars;
+    char *chars;
     int length;
 public:
     String() {
@@ -137,40 +137,91 @@ public:
         result.chars[result.length] = '\0';
         return result;
     }
+
+    vector<int> rabinKarp(const String &subStr) {
+        const int base = 26; 
+        const int mod = 1e9 + 9;
+        int S = getLength(), SS = subStr.length;
+        
+        vector<long long> posPow(max(S, SS));
+        posPow[0] = 1;
+        for (int i = 1; i < (int)posPow.size(); i++) {
+            posPow[i] = (posPow[i - 1] * base) % mod;
+        }
+        
+        vector<long long> hashes(S + 1, 0);
+        for (int i = 0; i < S; i++) {
+            hashes[i + 1] = (hashes[i] + (chars[i] - 'a' + 1) * posPow[i]) % mod;
+        }
+        
+        long long hash = 0;
+        for (int i = 0; i < SS; i++) 
+            hash = (hash + (subStr.chars[i] - 'a' + 1) * posPow[i]) % mod; 
+
+        vector<int> occurrences;
+        int killCounter = SS;
+        for (int i = 0; i + SS - 1 < S; i++) {
+            long long currentHash = (hashes[i + SS] + mod - hashes[i]) % mod;
+            if (currentHash == hash * posPow[i] % mod) {
+                for (int j = 0; j < SS; j++) {
+                    if (subStr.chars[j] == chars[i + j]) {
+                        killCounter = killCounter - 1;
+                        if (killCounter == 0) {
+                            occurrences.push_back(i);
+                        }
+                    }
+                }
+                killCounter = SS;
+            }
+        }
+        return occurrences;
+    }
 };
 
 int main() {
     string s, ss;
+    int count = 0, reverseCount = 0;
+    
     cout << "Enter the string: ";
     getline(cin, s);
     String string(s.c_str());
+    
     cout << "\nEnter the substring: ";
     getline(cin, ss);
     String subString(ss.c_str());
-    int count = 0, reverseCount = 0;
     
     cout << "\nALL SUBSTRINGS IN ORDER\n";
     vector<int> allMatches = string.findAllSubStrings(subString, count);
-    cout << "All occurrences of " << ss << ": ";
+    cout << "All occurrences of " << ss << " are on position: ";
     for (int i = 0; i < count; i++) {
-        cout << allMatches[i] + 1 << " ";
+        cout << allMatches[i] << " ";
     }
-    cout << "\n----------------------------------------\n";
+    cout << "\n----------------------------------------------------------\n";
 
     cout << "FIRST SUBSTRING IN ORDER\n";
     int firstPosition = string.findFirstSubString(subString);
-    cout << "First occurrence of " << ss << ": " << firstPosition + 1 << endl;
-    cout << "----------------------------------------\n";
+    cout << "First occurrence of " << ss << " is on position: " << firstPosition;
+    cout << "\n----------------------------------------------------------\n";
 
     cout << "ALL SUBSTRINGS IN REVERSE ORDER\n";
     vector <int> allReverseMatches = string.findAllSubStringsReverse(subString, reverseCount);
-    cout << "All occurrences of " << ss << "in reverse order: ";
+    cout << "All occurrences of " << ss << " in reverse order are on position: ";
     for (int i = 0; i < reverseCount; i++) {
-        cout << (string.getLength() - allReverseMatches[i] - subString.getLength() + 1) << " ";
+        cout << (string.getLength() - allReverseMatches[i] - subString.getLength()) << " ";
     }
-    cout << "\n----------------------------------------\n";
+    cout << "\n----------------------------------------------------------\n";
 
     cout << "FIRST SUBSTRING IN REVERSE ORDER\n";
     int firstReversePosition = string.findFirstSubStringReverse(subString);
-    cout << "First occurrence of '" << ss << "' in reverse order: " << firstReversePosition + 1 << endl;
+    cout << "First occurrence of " << ss << " in reverse order is on position: " << firstReversePosition;
+    cout << "\n----------------------------------------------------------\n";
+    
+    cout << "ALL SUBSTRINGS WITH RABIN-KARP\n";
+    vector <int> rabinKarpMatches = string.rabinKarp(subString);
+    cout << "All occurrences of " << ss << " in order using Rabin-Karp are on position: ";
+    for (int i = 0; i < rabinKarpMatches.size(); i++) {
+        cout << rabinKarpMatches[i] << " ";
+    }
+       
+    return 0;
 }
