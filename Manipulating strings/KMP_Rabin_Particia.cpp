@@ -1,5 +1,57 @@
+/*
+1 - KMP Algorithm and reverse KMP Algorithm
+2 - Rabin-Karp Algorithm
+3 - Patricia Trie
+*/
 #include <bits/stdc++.h>
 using namespace std;
+
+class PatriciaTrie {
+private:
+    struct Node {
+        unordered_map<char, Node*> children;
+        bool isEndOfWord;
+        Node() : isEndOfWord(false) {}
+    };
+    Node* root;
+public:
+    PatriciaTrie() {
+        root = new Node();
+    }
+    ~PatriciaTrie() {
+        clear(root);
+    }
+
+    void insert(const string& word) {
+        Node* current = root;
+        for (char ch : word) {
+            if (!current->children.count(ch)) {
+                current->children[ch] = new Node();
+            }
+            current = current->children[ch];
+        }
+        current->isEndOfWord = true;
+    }
+
+    bool search(const string& word) {
+        Node* current = root;
+        for (char ch : word) {
+            if (!current->children.count(ch)) {
+                return false;
+            }
+            current = current->children[ch];
+        }
+        return current->isEndOfWord;
+    }
+
+private:
+    void clear(Node* node) {
+        for (auto it = node->children.begin(); it != node->children.end(); ++it) {
+            clear(it->second);
+        }
+        delete node;
+    }
+};
 
 class String {
 protected:
@@ -107,7 +159,7 @@ public:
         if (subStr.length == 0) {
             return -1;
         }
-        int * table = buildKMPTable(subStr.chars, subStr.length);
+        int *table = buildKMPTable(subStr.chars, subStr.length);
         int j = subStr.length - 1;
         for (int i = length - 1; i >= 0; i--) {
             while (j < subStr.length - 1 && chars[i] != subStr.chars[j]) {
@@ -176,10 +228,17 @@ public:
         }
         return occurrences;
     }
+    void buildPatriciaTrie(PatriciaTrie& trie) {
+        stringstream ss(chars);
+        string word;
+        while (ss >> word) {
+            trie.insert(word);
+        }
+    }
 };
 
 int main() {
-    string s, ss;
+    string s, ss, sss, ssss;
     int count = 0, reverseCount = 0;
     
     cout << "Enter the string: ";
@@ -222,6 +281,29 @@ int main() {
     for (int i = 0; i < rabinKarpMatches.size(); i++) {
         cout << rabinKarpMatches[i] << " ";
     }
-       
+    cout << "\n----------------------------------------------------------\n";
+    
+    PatriciaTrie Trie;
+    cout << "\nEnter the english dictionary (write '!' when you finish inputing the words): ";
+    while (cin >> sss) {
+        if (sss == "!") {
+            break;
+        } else {
+            Trie.insert(sss);
+        }
+    }
+    cout << "\nEnter a word to search in the english dictionary (using Patricia Trie, write '!' when you finish inputing the words): ";
+    while (cin >> ssss) {
+        if (ssss == "!") {
+            break;
+        } else {
+            if (Trie.search(ssss)) {
+                cout << "The word " << ssss << " is found in the english dictionary." << endl;
+            } else {
+                cout << "The word " << ssss << " isn't found in the english dictionary." << endl;
+            }
+        }
+    }
+
     return 0;
 }
