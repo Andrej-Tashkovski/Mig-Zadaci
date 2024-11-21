@@ -7,3 +7,4 @@ Domasni:
 5 - Push-relabel algorithm
 6 - Find and Reverse-Find using KMP algorithm
 7 - Rabin-Karp algorithm
+8 - Patricia Trie
