@@ -43,6 +43,42 @@ public:
         }
         return current->isEndOfWord;
     }
+    bool startsWith(const string& prefix) {
+        Node* current = root;
+        for (char ch : prefix) {
+            if (!current->children.count(ch)) {
+                return false;
+            }
+            current = current->children[ch];
+        }
+        return true;
+    }
+    void getWordsWithPrefix(Node* current, string& prefix, vector<string>& result) {
+        if (current->isEndOfWord) {
+            result.push_back(prefix);
+        }
+
+        for (auto& child : current->children) {
+            prefix.push_back(child.first);
+            getWordsWithPrefix(child.second, prefix, result);
+            prefix.pop_back();
+        }
+    }
+    vector<string> getWordsWithPrefix(const string& prefix) {
+        Node* current = root;
+        vector<string> result;
+        string currentPrefix = prefix;
+
+        for (char ch : prefix) {
+            if (!current->children.count(ch)) {
+                return result;
+            }
+            current = current->children[ch];
+        }
+
+        getWordsWithPrefix(current, currentPrefix, result);
+        return result;
+    }
 
 private:
     void clear(Node* node) {
@@ -228,17 +264,10 @@ public:
         }
         return occurrences;
     }
-    void buildPatriciaTrie(PatriciaTrie& trie) {
-        stringstream ss(chars);
-        string word;
-        while (ss >> word) {
-            trie.insert(word);
-        }
-    }
 };
 
 int main() {
-    string s, ss, sss, ssss;
+    string s, ss, sss, ssss, prefix;
     int count = 0, reverseCount = 0;
     
     cout << "Enter the string: ";
@@ -302,6 +331,19 @@ int main() {
             } else {
                 cout << "The word " << ssss << " isn't found in the english dictionary." << endl;
             }
+        }
+    }
+    cout << "Enter a prefix to search in the Patricia Trie: ";
+    cin >> prefix;
+    vector<std::string> wordsWithPrefix = Trie.getWordsWithPrefix(prefix);
+
+    if (wordsWithPrefix.empty()) {
+        cout << "No words start with the prefix '" << prefix << "' in the Trie." << endl;
+    } else {
+        cout << "Words that start with the prefix '" << prefix << "': ";
+        reverse(wordsWithPrefix.begin(), wordsWithPrefix.end());
+        for (const std::string& word : wordsWithPrefix) {
+            cout << "[" << word << "] ";
         }
     }
 
