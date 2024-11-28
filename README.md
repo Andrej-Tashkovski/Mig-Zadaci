@@ -8,3 +8,4 @@ Domasni:
 6 - Find and Reverse-Find using KMP algorithm
 7 - Rabin-Karp algorithm
 8 - Patricia Trie
+9 - Macedonian Trie
