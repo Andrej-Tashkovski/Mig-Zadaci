@@ -9,3 +9,4 @@ Domasni:
 7 - Rabin-Karp algorithm
 8 - Patricia Trie
 9 - Macedonian Trie
+10 - Levenshtein distance
