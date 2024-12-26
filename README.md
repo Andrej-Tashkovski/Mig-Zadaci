@@ -10,3 +10,4 @@ Domasni:
 8 - Patricia Trie
 9 - Macedonian Trie
 10 - Levenshtein distance
+11 - Sieve of Eratosthenes
