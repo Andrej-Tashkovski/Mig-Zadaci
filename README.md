@@ -11,3 +11,4 @@ Domasni:
 9 - Macedonian Trie
 10 - Levenshtein distance
 11 - Sieve of Eratosthenes
+12 - Long number operations
