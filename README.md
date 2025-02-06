@@ -12,3 +12,4 @@ Domasni:
 10 - Levenshtein distance
 11 - Sieve of Eratosthenes
 12 - Long number operations
+13 - Long number factorization
