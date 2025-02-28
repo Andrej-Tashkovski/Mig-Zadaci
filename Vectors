@@ -1,0 +1,60 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void CrossProduct (vector<int> v1, vector<int> v2) {
+    vector<int> v3;
+    for (int i = 0; i < v1.size(); i++) {
+        v3.push_back(v1[(i+1) % 3] * v2[(i+2) % 3] - v1[(i+2) % 3] * v2[(i + 1) % 3]);
+    }
+
+    for (int i = 0; i < v3.size(); i++) {
+        cout << v3[i] << " ";
+    }
+
+    cout << endl;
+}
+
+void ScalarMultiplication (vector<int> v1, int n) {
+    vector<int> v2;
+    for (int i = 0; i < v1.size(); i++) {
+        v2.push_back(v1[i] * n);
+    }
+
+    for (int i = 0; i < v2.size(); i++) {
+        cout << v2[i] << " ";
+    }
+
+    cout << endl;
+}
+
+void VectorAddition (vector<int> v1, vector<int> v2) {
+    vector<int> v3;
+    for (int i = 0; i < v1.size(); i++) {
+        v3.push_back(v1[i] + v2[i]);
+    }
+
+    for (int i = 0; i < v3.size(); i++) {
+        cout << v3[i] << " ";
+    }
+
+    cout << endl;
+}
+
+void DotProduct (vector<int> v1, vector<int> v2) {
+    int product = 0;
+    for (int i = 0; i < v1.size(); i++) {
+        product += v1[i] * v2[i];
+    }
+
+    cout << product << endl;
+}
+
+int main() {
+    vector<int> v1 = {2, 3, 4}, v2 = {5, 6, 7};
+    int n = 2;
+    CrossProduct(v1, v2);
+    ScalarMultiplication(v1, n);
+    VectorAddition(v1, v2);
+    DotProduct(v1, v2);
+    return 0;
+}
