@@ -13,3 +13,4 @@ Domasni:
 11 - Sieve of Eratosthenes
 12 - Long number operations
 13 - Long number factorization
+14 - Vector operations in 3D
